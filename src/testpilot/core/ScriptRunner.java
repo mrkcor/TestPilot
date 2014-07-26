@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package testpilot.core;
 
 import org.jruby.embed.ScriptingContainer;
@@ -15,6 +10,10 @@ public class ScriptRunner {
 
     public void run(String script) {
         ScriptingContainer container = new ScriptingContainer();
+        String basepath = System.getProperty("user.dir");
+        container.runScriptlet("ENV['GEM_PATH']='" + basepath + "/lib/rubygems/'");
+        // TODO: Connect container STDOUT and STDERR to GUI
         container.runScriptlet(script);
     }
+
 }
