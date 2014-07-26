@@ -74,5 +74,8 @@
         <copy todir="${dist.dir}/lib/rubygems/">
             <fileset dir="./lib/rubygems/" />
         </copy>
+        <copy todir="${dist.dir}/lib/ruby/">
+            <fileset dir="./lib/ruby/" />
+        </copy>
     </target>
 </project>
