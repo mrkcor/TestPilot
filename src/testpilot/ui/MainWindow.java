@@ -5,6 +5,8 @@
  */
 package testpilot.ui;
 
+import testpilot.core.ScriptRunner;
+
 /**
  *
  * @author Mark Kremer
@@ -28,13 +30,13 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
+        jEditorPane = new javax.swing.JEditorPane();
         runButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jEditorPane1.setFont(new java.awt.Font("Lucida Console", 0, 11)); // NOI18N
-        jScrollPane1.setViewportView(jEditorPane1);
+        jEditorPane.setFont(new java.awt.Font("Lucida Console", 0, 11)); // NOI18N
+        jScrollPane1.setViewportView(jEditorPane);
 
         runButton.setText("Run");
         runButton.addActionListener(new java.awt.event.ActionListener() {
@@ -70,8 +72,8 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
-        // TODO add your handling code here:
-
+        ScriptRunner runner = new ScriptRunner();
+        runner.run(jEditorPane.getText());
     }//GEN-LAST:event_runButtonActionPerformed
 
     /**
@@ -110,7 +112,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JEditorPane jEditorPane1;
+    private javax.swing.JEditorPane jEditorPane;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton runButton;
     // End of variables declaration//GEN-END:variables
