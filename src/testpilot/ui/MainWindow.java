@@ -27,34 +27,83 @@ public class MainWindow extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane = new javax.swing.JEditorPane();
-        testPilotStatusIcon = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        testPilotStatus = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        suiteTree = new javax.swing.JTree();
+        mainMenuBar = new javax.swing.JMenuBar();
         mainMenu = new javax.swing.JMenu();
+        newSuiteMenuItem = new javax.swing.JMenuItem();
+        openSuiteMenuItem = new javax.swing.JMenuItem();
+        runSuiteMenuItem = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        newScriptMenuItem = new javax.swing.JMenuItem();
+        openScriptMenuItem = new javax.swing.JMenuItem();
         runMenuItem = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        exitMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TestPilot");
+        setPreferredSize(new java.awt.Dimension(800, 600));
 
         jEditorPane.setFont(new java.awt.Font("Lucida Console", 0, 11)); // NOI18N
         jScrollPane1.setViewportView(jEditorPane);
 
-        testPilotStatusIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        testPilotStatusIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testpilot/resources/grey.png"))); // NOI18N
+        testPilotStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        testPilotStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testpilot/resources/grey.png"))); // NOI18N
+
+        jScrollPane2.setViewportView(suiteTree);
 
         mainMenu.setText("File");
 
+        newSuiteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        newSuiteMenuItem.setText("New Suite");
+        mainMenu.add(newSuiteMenuItem);
+
+        openSuiteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        openSuiteMenuItem.setText("Open Suite");
+        mainMenu.add(openSuiteMenuItem);
+
+        runSuiteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        runSuiteMenuItem.setText("Run Suite");
+        mainMenu.add(runSuiteMenuItem);
+        mainMenu.add(jSeparator1);
+
+        newScriptMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        newScriptMenuItem.setText("New Script");
+        mainMenu.add(newScriptMenuItem);
+
+        openScriptMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        openScriptMenuItem.setText("Open Script");
+        openScriptMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openScriptMenuItemActionPerformed(evt);
+            }
+        });
+        mainMenu.add(openScriptMenuItem);
+
         runMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
-        runMenuItem.setText("Run");
+        runMenuItem.setText("Run Script");
         runMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 runMenuItemActionPerformed(evt);
             }
         });
         mainMenu.add(runMenuItem);
+        mainMenu.add(jSeparator2);
 
-        jMenuBar1.add(mainMenu);
+        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        exitMenuItem.setText("Exit");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
+        mainMenu.add(exitMenuItem);
 
-        setJMenuBar(jMenuBar1);
+        mainMenuBar.add(mainMenu);
+
+        setJMenuBar(mainMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -63,9 +112,12 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(testPilotStatusIcon)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(testPilotStatus)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -73,13 +125,15 @@ public class MainWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(testPilotStatusIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(testPilotStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        testPilotStatusIcon.getAccessibleContext().setAccessibleName("testPilotStatus");
+        testPilotStatus.getAccessibleContext().setAccessibleName("testPilotStatus");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -88,13 +142,20 @@ public class MainWindow extends javax.swing.JFrame {
         ScriptRunner runner = new ScriptRunner();
         try {
             runner.run(jEditorPane.getText());
-            testPilotStatusIcon.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/green.png")));
-            testPilotStatusIcon.setText("OK");
+            testPilotStatus.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/green.png")));
+            testPilotStatus.setText("OK");
         } catch (Exception exception) {
-            testPilotStatusIcon.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/red.png")));
-            testPilotStatusIcon.setText("Failed");
+            testPilotStatus.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/red.png")));
+            testPilotStatus.setText("Failed");
         }
     }//GEN-LAST:event_runMenuItemActionPerformed
+
+    private void openScriptMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openScriptMenuItemActionPerformed
+    }//GEN-LAST:event_openScriptMenuItemActionPerformed
+
+    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_exitMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -132,11 +193,21 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JEditorPane jEditorPane;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JMenu mainMenu;
+    private javax.swing.JMenuBar mainMenuBar;
+    private javax.swing.JMenuItem newScriptMenuItem;
+    private javax.swing.JMenuItem newSuiteMenuItem;
+    private javax.swing.JMenuItem openScriptMenuItem;
+    private javax.swing.JMenuItem openSuiteMenuItem;
     private javax.swing.JMenuItem runMenuItem;
-    private javax.swing.JLabel testPilotStatusIcon;
+    private javax.swing.JMenuItem runSuiteMenuItem;
+    private javax.swing.JTree suiteTree;
+    private javax.swing.JLabel testPilotStatus;
     // End of variables declaration//GEN-END:variables
 }
