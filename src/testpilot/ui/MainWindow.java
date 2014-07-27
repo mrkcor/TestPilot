@@ -27,23 +27,34 @@ public class MainWindow extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane = new javax.swing.JEditorPane();
-        runButton = new javax.swing.JButton();
         testPilotStatusIcon = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        mainMenu = new javax.swing.JMenu();
+        runMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("TestPilot");
 
         jEditorPane.setFont(new java.awt.Font("Lucida Console", 0, 11)); // NOI18N
         jScrollPane1.setViewportView(jEditorPane);
 
-        runButton.setText("Run");
-        runButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runButtonActionPerformed(evt);
-            }
-        });
-
         testPilotStatusIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         testPilotStatusIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testpilot/resources/grey.png"))); // NOI18N
+
+        mainMenu.setText("File");
+
+        runMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        runMenuItem.setText("Run");
+        runMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runMenuItemActionPerformed(evt);
+            }
+        });
+        mainMenu.add(runMenuItem);
+
+        jMenuBar1.add(mainMenu);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -54,20 +65,17 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(testPilotStatusIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(runButton)))
+                        .addComponent(testPilotStatusIcon)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                .addComponent(testPilotStatusIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(runButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(testPilotStatusIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -76,15 +84,17 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
+    private void runMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runMenuItemActionPerformed
         ScriptRunner runner = new ScriptRunner();
         try {
             runner.run(jEditorPane.getText());
             testPilotStatusIcon.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/green.png")));
+            testPilotStatusIcon.setText("OK");
         } catch (Exception exception) {
             testPilotStatusIcon.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/red.png")));
+            testPilotStatusIcon.setText("Failed");
         }
-    }//GEN-LAST:event_runButtonActionPerformed
+    }//GEN-LAST:event_runMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -123,8 +133,10 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JEditorPane jEditorPane;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton runButton;
+    private javax.swing.JMenu mainMenu;
+    private javax.swing.JMenuItem runMenuItem;
     private javax.swing.JLabel testPilotStatusIcon;
     // End of variables declaration//GEN-END:variables
 }
