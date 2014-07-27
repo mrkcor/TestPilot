@@ -1,5 +1,6 @@
 package testpilot.ui;
 
+import javax.swing.ImageIcon;
 import testpilot.core.ScriptRunner;
 
 /**
@@ -27,6 +28,7 @@ public class MainWindow extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane = new javax.swing.JEditorPane();
         runButton = new javax.swing.JButton();
+        testPilotStatusIcon = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -40,6 +42,9 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        testPilotStatusIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        testPilotStatusIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testpilot/resources/grey.png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -48,8 +53,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(testPilotStatusIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(runButton)))
                 .addContainerGap())
         );
@@ -59,16 +65,25 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(runButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(runButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(testPilotStatusIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
+
+        testPilotStatusIcon.getAccessibleContext().setAccessibleName("testPilotStatus");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
         ScriptRunner runner = new ScriptRunner();
-        runner.run(jEditorPane.getText());
+        try {
+            runner.run(jEditorPane.getText());
+            testPilotStatusIcon.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/green.png")));
+        } catch (Exception exception) {
+            testPilotStatusIcon.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/red.png")));
+        }
     }//GEN-LAST:event_runButtonActionPerformed
 
     /**
@@ -110,5 +125,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JEditorPane jEditorPane;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton runButton;
+    private javax.swing.JLabel testPilotStatusIcon;
     // End of variables declaration//GEN-END:variables
 }
