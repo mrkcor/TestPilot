@@ -8,7 +8,11 @@ class TestPilot < Minitest::Runnable
   include Minitest::Assertions
 
   def setup
-    Capybara.reset_sessions!
+    begin
+      Capybara.reset_sessions!
+    rescue Errno::ECONNREFUSED
+      page.driver.quit
+    end
     Capybara.use_default_driver
   end
 
