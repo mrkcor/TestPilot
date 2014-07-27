@@ -1,9 +1,11 @@
 require "capybara"
+require "minitest"
 
 Capybara.default_driver = :selenium
 
-class TestPilot
+class TestPilot < Minitest::Runnable
   include Capybara::DSL
+  include Minitest::Assertions
 
   def setup
     Capybara.reset_sessions!

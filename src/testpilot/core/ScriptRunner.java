@@ -1,6 +1,5 @@
 package testpilot.core;
 
-import org.jruby.embed.LocalContextScope;
 import org.jruby.embed.ScriptingContainer;
 
 /**
@@ -17,7 +16,7 @@ public class ScriptRunner {
         container.runScriptlet("ENV['GEM_PATH']='" + basepath + "/lib/rubygems/'");
         container.runScriptlet("require './lib/ruby/init.rb'");
         // TODO: Connect container STDOUT and STDERR to GUI
-        container.runScriptlet("TestPilot.new.fly do; " + script + "; end");
+        container.runScriptlet("TestPilot.new('TestPilot').fly do; " + script + "; end");
     }
 
 }
