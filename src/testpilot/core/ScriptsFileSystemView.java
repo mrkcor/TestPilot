@@ -23,25 +23,45 @@
  */
 package testpilot.core;
 
-import org.jruby.embed.LocalContextScope;
-import org.jruby.embed.ScriptingContainer;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.filechooser.FileSystemView;
 
 /**
  *
  * @author Mark Kremer
  */
-public class ScriptRunner {
+public class ScriptsFileSystemView extends FileSystemView {
 
-    public void run(String script) {
-        // NOTE: With LocalContextScope.SINGLETHREAD as argument you get a clean interpreter, it will be slower though
-        ScriptingContainer container = new ScriptingContainer(LocalContextScope.SINGLETON);
-        // FIXME: A better way is needed to determine the working directory
-        String basepath = System.getProperty("user.dir");
-        container.runScriptlet("ENV['GEM_PATH']='" + basepath + "/lib/rubygems/'");
-        container.runScriptlet("require './lib/ruby/init.rb'");
-        container.runScriptlet("TestPilot.root='" + basepath + "'");
-        // TODO: Connect container STDOUT and STDERR to GUI
-        container.runScriptlet("TestPilot.new('TestPilot').fly do; " + script + "; end");
+    private final File[] rootDirectories;
+
+    public ScriptsFileSystemView() {
+        File rootDirectory = new File(System.getProperty("user.dir") + File.separator + "scripts");
+        this.rootDirectories = new File[]{rootDirectory};
     }
 
+    @Override
+    public File createNewFolder(File containingDir) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public File[] getRoots() {
+        return rootDirectories;
+    }
+
+    @Override
+    public boolean isRoot(File file) {
+        for (File root : rootDirectories) {
+            if (root.equals(file)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public File getHomeDirectory() {
+        return rootDirectories[0];
+    }
 }

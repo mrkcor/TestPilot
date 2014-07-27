@@ -1,7 +1,35 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2014 Mark Kremer.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package testpilot.ui;
 
+import java.io.File;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileSystemView;
 import testpilot.core.ScriptRunner;
+import testpilot.core.ScriptsFileSystemView;
+import testpilot.core.TestPilot;
 
 /**
  *
@@ -9,11 +37,17 @@ import testpilot.core.ScriptRunner;
  */
 public class MainWindow extends javax.swing.JFrame {
 
+    private final TestPilot testPilot;
+
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
         initComponents();
+
+        testPilot = new TestPilot();
+
+        jEditorPane.requestFocus();
     }
 
     /**
@@ -58,10 +92,20 @@ public class MainWindow extends javax.swing.JFrame {
 
         newSuiteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         newSuiteMenuItem.setText("New Suite");
+        newSuiteMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newSuiteMenuItemActionPerformed(evt);
+            }
+        });
         mainMenu.add(newSuiteMenuItem);
 
         openSuiteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         openSuiteMenuItem.setText("Open Suite");
+        openSuiteMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openSuiteMenuItemActionPerformed(evt);
+            }
+        });
         mainMenu.add(openSuiteMenuItem);
 
         runSuiteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
@@ -139,9 +183,8 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void runMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runMenuItemActionPerformed
-        ScriptRunner runner = new ScriptRunner();
         try {
-            runner.run(jEditorPane.getText());
+            testPilot.run(jEditorPane.getText());
             testPilotStatus.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/green.png")));
             testPilotStatus.setText("OK");
         } catch (Exception exception) {
@@ -156,6 +199,21 @@ public class MainWindow extends javax.swing.JFrame {
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void newSuiteMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newSuiteMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newSuiteMenuItemActionPerformed
+
+    private void openSuiteMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openSuiteMenuItemActionPerformed
+        FileSystemView fsv = new ScriptsFileSystemView();
+        JFileChooser fileChooser = new JFileChooser(fsv.getHomeDirectory(), fsv);
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            System.out.println(selectedFile.getPath());
+        }
+    }//GEN-LAST:event_openSuiteMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
