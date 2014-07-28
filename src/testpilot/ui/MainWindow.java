@@ -255,7 +255,11 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
         if (currentFile == null) {
-            JFileChooser fileChooser = new JFileChooser(testPilot.getScriptsPath());
+            File directoryPath = currentSuite;
+            if (directoryPath == null) {
+                directoryPath = testPilot.getScriptsPath();
+            }
+            JFileChooser fileChooser = new JFileChooser(directoryPath);
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -269,6 +273,10 @@ public class MainWindow extends javax.swing.JFrame {
             } catch (IOException exception) {
                 // FIXME: Error handling!
             }
+        }
+
+        if (currentSuite != null) {
+            suiteTree.setModel(new FileTreeModel(currentSuite));
         }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
