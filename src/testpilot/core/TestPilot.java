@@ -24,6 +24,8 @@
 package testpilot.core;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import org.jruby.embed.LocalContextScope;
 import org.jruby.embed.ScriptingContainer;
 
@@ -35,6 +37,7 @@ public class TestPilot {
 
     private File basePath;
     private File scriptsPath;
+    private File functionsPath;
 
     public TestPilot(File basePath) {
         if (!basePath.isDirectory()) {
@@ -46,7 +49,8 @@ public class TestPilot {
         }
 
         this.basePath = basePath;
-        this.setScriptsPath(new File(basePath.getPath() + File.separator + "scripts"));
+        this.scriptsPath = new File(basePath.getPath() + File.separator + "scripts");
+        this.functionsPath = new File(scriptsPath.getPath() + File.separator + "functions");
     }
 
     public File getBasePath() {
@@ -58,15 +62,15 @@ public class TestPilot {
     }
 
     public void setScriptsPath(File scriptsPath) {
-        if (!scriptsPath.isDirectory()) {
-            throw new IllegalArgumentException("TestPilot scriptspath must be a directory.");
-        }
-
-        if (!scriptsPath.canRead()) {
-            throw new IllegalArgumentException("TestPilot scriptspath is not readable.");
-        }
-
         this.scriptsPath = scriptsPath;
+    }
+
+    public File getFunctionsPath() {
+        return functionsPath;
+    }
+
+    public void setFunctionsPath(File functionsPath) {
+        this.functionsPath = functionsPath;
     }
 
     public void run(String script) throws Exception {
@@ -74,9 +78,31 @@ public class TestPilot {
         container.runScriptlet("ENV['GEM_PATH']='" + getBasePath().getPath() + "/lib/rubygems/'");
         container.runScriptlet("require './lib/ruby/test_pilot.rb'");
         container.runScriptlet("$LOAD_PATH << '" + getScriptsPath().getPath() + "'");
-        container.runScriptlet("TestPilot.root='" + getScriptsPath().getPath() + "'");
+        container.runScriptlet("TestPilot.functions_path='" + getFunctionsPath().getPath() + "'");
         // TODO: Connect container STDOUT and STDERR to GUI
         container.runScriptlet("TestPilot.new('TestPilot').fly do; " + script + "; end");
+    }
+
+    public void runDirectory(File path) {
+        if (!path.isDirectory()) {
+            throw new IllegalArgumentException("Path must be a directory.");
+        }
+
+        if (!path.canRead()) {
+            throw new IllegalArgumentException("Path is not readable.");
+        }
+
+        File[] files = path.listFiles();
+
+        for (File file : files) {
+            try {
+                System.out.println("Running " + file.getName());
+                byte[] encoded = Files.readAllBytes(Paths.get(file.getPath()));
+                run(new String(encoded));
+            } catch (Exception exception) {
+                // TODO: Handle failure
+            }
+        }
     }
 
 }

@@ -83,6 +83,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TestPilot");
+        setPreferredSize(new java.awt.Dimension(800, 600));
 
         jEditorPane.setFont(new java.awt.Font("Lucida Console", 0, 11)); // NOI18N
         jScrollPane1.setViewportView(jEditorPane);
@@ -240,8 +241,9 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_newScriptMenuItemActionPerformed
 
     private void runAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runAllMenuItemActionPerformed
-        // TODO add your handling code here:
-        System.out.println("Run all!");
+        if (currentSuite != null) {
+            testPilot.runDirectory(currentSuite);
+        }
     }//GEN-LAST:event_runAllMenuItemActionPerformed
 
     private void currentSuiteTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_currentSuiteTreeMouseClicked
