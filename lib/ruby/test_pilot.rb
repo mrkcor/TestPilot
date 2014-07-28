@@ -26,7 +26,7 @@ class TestPilot < Minitest::Runnable
   end
 
   def method_missing(method_name, *args, &block)
-    function_file_path = "#{@@root}/scripts/functions/#{method_name}"
+    function_file_path = "#{@@root}/functions/#{method_name}"
     if (File.exists?(function_file_path))
        define_singleton_method(method_name) do |*args|
          eval(File.read(function_file_path))

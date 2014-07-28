@@ -23,14 +23,60 @@
  */
 package testpilot.core;
 
+import java.io.File;
+import org.jruby.embed.LocalContextScope;
+import org.jruby.embed.ScriptingContainer;
+
 /**
  *
  * @author Mark Kremer
  */
 public class TestPilot {
 
-    public void run(String script) throws Exception {
-        ScriptRunner runner = new ScriptRunner();
-        runner.run(script);
+    private File basePath;
+    private File scriptsPath;
+
+    public TestPilot(File basePath) {
+        if (!basePath.isDirectory()) {
+            throw new IllegalArgumentException("TestPilot basepath must be a directory.");
+        }
+
+        if (!basePath.canRead()) {
+            throw new IllegalArgumentException("TestPilot basepath is not readable.");
+        }
+
+        this.basePath = basePath;
+        this.setScriptsPath(new File(basePath.getPath() + File.separator + "scripts"));
     }
+
+    public File getBasePath() {
+        return basePath;
+    }
+
+    public File getScriptsPath() {
+        return scriptsPath;
+    }
+
+    public void setScriptsPath(File scriptsPath) {
+        if (!scriptsPath.isDirectory()) {
+            throw new IllegalArgumentException("TestPilot scriptspath must be a directory.");
+        }
+
+        if (!scriptsPath.canRead()) {
+            throw new IllegalArgumentException("TestPilot scriptspath is not readable.");
+        }
+
+        this.scriptsPath = scriptsPath;
+    }
+
+    public void run(String script) throws Exception {
+        ScriptingContainer container = new ScriptingContainer(LocalContextScope.SINGLETON);
+        container.runScriptlet("ENV['GEM_PATH']='" + getBasePath().getPath() + "/lib/rubygems/'");
+        container.runScriptlet("require './lib/ruby/test_pilot.rb'");
+        container.runScriptlet("$LOAD_PATH << '" + getScriptsPath().getPath() + "'");
+        container.runScriptlet("TestPilot.root='" + getScriptsPath().getPath() + "'");
+        // TODO: Connect container STDOUT and STDERR to GUI
+        container.runScriptlet("TestPilot.new('TestPilot').fly do; " + script + "; end");
+    }
+
 }

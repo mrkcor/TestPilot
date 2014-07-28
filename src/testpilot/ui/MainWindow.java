@@ -26,9 +26,6 @@ package testpilot.ui;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileSystemView;
-import testpilot.core.ScriptRunner;
-import testpilot.core.ScriptsFileSystemView;
 import testpilot.core.TestPilot;
 
 /**
@@ -45,9 +42,7 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow() {
         initComponents();
 
-        testPilot = new TestPilot();
-
-        jEditorPane.requestFocus();
+        testPilot = new TestPilot(new File(System.getProperty("user.dir")));
     }
 
     /**
@@ -64,6 +59,7 @@ public class MainWindow extends javax.swing.JFrame {
         testPilotStatus = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         suiteTree = new javax.swing.JTree();
+        currentSuiteLabel = new javax.swing.JLabel();
         mainMenuBar = new javax.swing.JMenuBar();
         mainMenu = new javax.swing.JMenu();
         newSuiteMenuItem = new javax.swing.JMenuItem();
@@ -86,7 +82,11 @@ public class MainWindow extends javax.swing.JFrame {
         testPilotStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         testPilotStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testpilot/resources/grey.png"))); // NOI18N
 
+        suiteTree.setRequestFocusEnabled(false);
+        suiteTree.setRootVisible(false);
         jScrollPane2.setViewportView(suiteTree);
+
+        currentSuiteLabel.setText("Suite");
 
         mainMenu.setText("File");
 
@@ -157,7 +157,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(currentSuiteLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
@@ -173,7 +175,10 @@ public class MainWindow extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(currentSuiteLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -205,8 +210,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_newSuiteMenuItemActionPerformed
 
     private void openSuiteMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openSuiteMenuItemActionPerformed
-        FileSystemView fsv = new ScriptsFileSystemView();
-        JFileChooser fileChooser = new JFileChooser(fsv.getHomeDirectory(), fsv);
+        JFileChooser fileChooser = new JFileChooser(testPilot.getScriptsPath());
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -251,6 +255,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel currentSuiteLabel;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JEditorPane jEditorPane;
     private javax.swing.JScrollPane jScrollPane1;
