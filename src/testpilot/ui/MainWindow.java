@@ -67,7 +67,7 @@ public class MainWindow extends javax.swing.JFrame {
         jEditorPane = new javax.swing.JEditorPane();
         testPilotStatus = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        suiteTree = new javax.swing.JTree();
+        currentSuiteTree = new javax.swing.JTree();
         currentSuiteLabel = new javax.swing.JLabel();
         currentFileLabel = new javax.swing.JLabel();
         mainMenuBar = new javax.swing.JMenuBar();
@@ -83,7 +83,6 @@ public class MainWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TestPilot");
-        setPreferredSize(new java.awt.Dimension(800, 600));
 
         jEditorPane.setFont(new java.awt.Font("Lucida Console", 0, 11)); // NOI18N
         jScrollPane1.setViewportView(jEditorPane);
@@ -92,15 +91,15 @@ public class MainWindow extends javax.swing.JFrame {
         testPilotStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testpilot/resources/grey.png"))); // NOI18N
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
-        suiteTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        suiteTree.setRequestFocusEnabled(false);
-        suiteTree.setRootVisible(false);
-        suiteTree.addMouseListener(new java.awt.event.MouseAdapter() {
+        currentSuiteTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        currentSuiteTree.setRequestFocusEnabled(false);
+        currentSuiteTree.setRootVisible(false);
+        currentSuiteTree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                suiteTreeMouseClicked(evt);
+                currentSuiteTreeMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(suiteTree);
+        jScrollPane2.setViewportView(currentSuiteTree);
 
         currentSuiteLabel.setText("Suite");
 
@@ -230,7 +229,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             currentSuite = fileChooser.getSelectedFile();
-            suiteTree.setModel(new FileTreeModel(currentSuite));
+            currentSuiteTree.setModel(new FileTreeModel(currentSuite));
         }
     }//GEN-LAST:event_openSuiteMenuItemActionPerformed
 
@@ -245,9 +244,9 @@ public class MainWindow extends javax.swing.JFrame {
         System.out.println("Run all!");
     }//GEN-LAST:event_runAllMenuItemActionPerformed
 
-    private void suiteTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suiteTreeMouseClicked
+    private void currentSuiteTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_currentSuiteTreeMouseClicked
         if (evt.getClickCount() == 2) {
-            TreePath path = suiteTree.getSelectionPath();
+            TreePath path = currentSuiteTree.getSelectionPath();
             if (path != null) {
                 try {
                     File scriptFile = ((FileTreeNode) path.getLastPathComponent()).getUserObject();
@@ -260,7 +259,7 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             }
         }
-    }//GEN-LAST:event_suiteTreeMouseClicked
+    }//GEN-LAST:event_currentSuiteTreeMouseClicked
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
         if (currentFile == null) {
@@ -287,7 +286,7 @@ public class MainWindow extends javax.swing.JFrame {
         }
 
         if (currentSuite != null) {
-            suiteTree.setModel(new FileTreeModel(currentSuite));
+            currentSuiteTree.setModel(new FileTreeModel(currentSuite));
         }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
@@ -329,6 +328,7 @@ public class MainWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentFileLabel;
     private javax.swing.JLabel currentSuiteLabel;
+    private javax.swing.JTree currentSuiteTree;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JEditorPane jEditorPane;
     private javax.swing.JScrollPane jScrollPane1;
@@ -342,7 +342,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem runAllMenuItem;
     private javax.swing.JMenuItem runMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
-    private javax.swing.JTree suiteTree;
     private javax.swing.JLabel testPilotStatus;
     // End of variables declaration//GEN-END:variables
 
