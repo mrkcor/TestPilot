@@ -69,6 +69,7 @@ public class MainWindow extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         suiteTree = new javax.swing.JTree();
         currentSuiteLabel = new javax.swing.JLabel();
+        currentFileLabel = new javax.swing.JLabel();
         mainMenuBar = new javax.swing.JMenuBar();
         mainMenu = new javax.swing.JMenu();
         openSuiteMenuItem = new javax.swing.JMenuItem();
@@ -102,6 +103,8 @@ public class MainWindow extends javax.swing.JFrame {
         jScrollPane2.setViewportView(suiteTree);
 
         currentSuiteLabel.setText("Suite");
+
+        currentFileLabel.setText("New file");
 
         mainMenu.setText("File");
 
@@ -172,15 +175,17 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(testPilotStatus)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(currentSuiteLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(testPilotStatus)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(currentFileLabel)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -189,12 +194,13 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(testPilotStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(currentSuiteLabel)
+                    .addComponent(currentFileLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(currentSuiteLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -230,6 +236,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void newScriptMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newScriptMenuItemActionPerformed
         currentFile = null;
+        currentFileLabel.setText("New file");
         jEditorPane.setText("");
     }//GEN-LAST:event_newScriptMenuItemActionPerformed
 
@@ -247,6 +254,7 @@ public class MainWindow extends javax.swing.JFrame {
                     byte[] encoded = Files.readAllBytes(Paths.get(scriptFile.getPath()));
                     jEditorPane.setText(new String(encoded));
                     currentFile = scriptFile;
+                    currentFileLabel.setText(currentFile.getName());
                 } catch (IOException exception) {
                     // FIXME: Error handling!
                 }
@@ -275,6 +283,7 @@ public class MainWindow extends javax.swing.JFrame {
             } catch (IOException exception) {
                 // FIXME: Error handling!
             }
+            currentFileLabel.setText(currentFile.getName());
         }
 
         if (currentSuite != null) {
@@ -318,6 +327,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel currentFileLabel;
     private javax.swing.JLabel currentSuiteLabel;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JEditorPane jEditorPane;
