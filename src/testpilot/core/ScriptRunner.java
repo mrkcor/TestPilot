@@ -38,8 +38,9 @@ public class ScriptRunner {
         // FIXME: A better way is needed to determine the working directory
         String basepath = System.getProperty("user.dir");
         container.runScriptlet("ENV['GEM_PATH']='" + basepath + "/lib/rubygems/'");
-        container.runScriptlet("require './lib/ruby/init.rb'");
+        container.runScriptlet("require './lib/ruby/test_pilot.rb'");
         container.runScriptlet("TestPilot.root='" + basepath + "'");
+        container.runScriptlet("$LOAD_PATH << '" + basepath + "/scripts/lib/'");
         // TODO: Connect container STDOUT and STDERR to GUI
         container.runScriptlet("TestPilot.new('TestPilot').fly do; " + script + "; end");
     }
