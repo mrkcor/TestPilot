@@ -228,8 +228,8 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_openSuiteMenuItemActionPerformed
 
     private void newScriptMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newScriptMenuItemActionPerformed
-        // TODO add your handling code here:
-        System.out.println("New script!");
+        currentFile = null;
+        jEditorPane.setText("");
     }//GEN-LAST:event_newScriptMenuItemActionPerformed
 
     private void runAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runAllMenuItemActionPerformed
@@ -254,6 +254,15 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_suiteTreeMouseClicked
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
+        if (currentFile == null) {
+            JFileChooser fileChooser = new JFileChooser(testPilot.getScriptsPath());
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                currentFile = fileChooser.getSelectedFile();
+            }
+        }
+
         if (currentFile != null) {
             try {
                 Files.write(Paths.get(currentFile.getPath()), jEditorPane.getText().getBytes());
