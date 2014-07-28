@@ -23,11 +23,16 @@
  */
 package testpilot.ui;
 
-import testpilot.ui.jtree.FileTreeModel;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.tree.TreePath;
 import testpilot.core.TestPilot;
+import testpilot.ui.jtree.FileTreeModel;
+import testpilot.ui.jtree.FileTreeNode;
 
 /**
  *
@@ -36,6 +41,8 @@ import testpilot.core.TestPilot;
 public class MainWindow extends javax.swing.JFrame {
 
     private final TestPilot testPilot;
+    private File currentSuite;
+    private File currentFile;
 
     /**
      * Creates new form MainWindow
@@ -63,13 +70,12 @@ public class MainWindow extends javax.swing.JFrame {
         currentSuiteLabel = new javax.swing.JLabel();
         mainMenuBar = new javax.swing.JMenuBar();
         mainMenu = new javax.swing.JMenu();
-        newSuiteMenuItem = new javax.swing.JMenuItem();
         openSuiteMenuItem = new javax.swing.JMenuItem();
-        runSuiteMenuItem = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         newScriptMenuItem = new javax.swing.JMenuItem();
-        openScriptMenuItem = new javax.swing.JMenuItem();
+        saveMenuItem = new javax.swing.JMenuItem();
         runMenuItem = new javax.swing.JMenuItem();
+        runAllMenuItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         exitMenuItem = new javax.swing.JMenuItem();
 
@@ -87,56 +93,62 @@ public class MainWindow extends javax.swing.JFrame {
         suiteTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         suiteTree.setRequestFocusEnabled(false);
         suiteTree.setRootVisible(false);
+        suiteTree.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                suiteTreeMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(suiteTree);
 
         currentSuiteLabel.setText("Suite");
 
         mainMenu.setText("File");
 
-        newSuiteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        newSuiteMenuItem.setText("New Suite");
-        newSuiteMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newSuiteMenuItemActionPerformed(evt);
-            }
-        });
-        mainMenu.add(newSuiteMenuItem);
-
-        openSuiteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        openSuiteMenuItem.setText("Open Suite");
+        openSuiteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        openSuiteMenuItem.setText("Open directory");
         openSuiteMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openSuiteMenuItemActionPerformed(evt);
             }
         });
         mainMenu.add(openSuiteMenuItem);
-
-        runSuiteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        runSuiteMenuItem.setText("Run Suite");
-        mainMenu.add(runSuiteMenuItem);
         mainMenu.add(jSeparator1);
 
         newScriptMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        newScriptMenuItem.setText("New Script");
-        mainMenu.add(newScriptMenuItem);
-
-        openScriptMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        openScriptMenuItem.setText("Open Script");
-        openScriptMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        newScriptMenuItem.setText("New");
+        newScriptMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openScriptMenuItemActionPerformed(evt);
+                newScriptMenuItemActionPerformed(evt);
             }
         });
-        mainMenu.add(openScriptMenuItem);
+        mainMenu.add(newScriptMenuItem);
+
+        saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        saveMenuItem.setText("Save");
+        saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveMenuItemActionPerformed(evt);
+            }
+        });
+        mainMenu.add(saveMenuItem);
 
         runMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
-        runMenuItem.setText("Run Script");
+        runMenuItem.setText("Run");
         runMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 runMenuItemActionPerformed(evt);
             }
         });
         mainMenu.add(runMenuItem);
+
+        runAllMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        runAllMenuItem.setText("Run all");
+        runAllMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runAllMenuItemActionPerformed(evt);
+            }
+        });
+        mainMenu.add(runAllMenuItem);
         mainMenu.add(jSeparator2);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
@@ -201,26 +213,55 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_runMenuItemActionPerformed
 
-    private void openScriptMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openScriptMenuItemActionPerformed
-    }//GEN-LAST:event_openScriptMenuItemActionPerformed
-
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
-
-    private void newSuiteMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newSuiteMenuItemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_newSuiteMenuItemActionPerformed
 
     private void openSuiteMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openSuiteMenuItemActionPerformed
         JFileChooser fileChooser = new JFileChooser(testPilot.getScriptsPath());
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            suiteTree.setModel(new FileTreeModel(selectedFile));
+            currentSuite = fileChooser.getSelectedFile();
+            suiteTree.setModel(new FileTreeModel(currentSuite));
         }
     }//GEN-LAST:event_openSuiteMenuItemActionPerformed
+
+    private void newScriptMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newScriptMenuItemActionPerformed
+        // TODO add your handling code here:
+        System.out.println("New script!");
+    }//GEN-LAST:event_newScriptMenuItemActionPerformed
+
+    private void runAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runAllMenuItemActionPerformed
+        // TODO add your handling code here:
+        System.out.println("Run all!");
+    }//GEN-LAST:event_runAllMenuItemActionPerformed
+
+    private void suiteTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suiteTreeMouseClicked
+        if (evt.getClickCount() == 2) {
+            TreePath path = suiteTree.getSelectionPath();
+            if (path != null) {
+                try {
+                    File scriptFile = ((FileTreeNode) path.getLastPathComponent()).getUserObject();
+                    byte[] encoded = Files.readAllBytes(Paths.get(scriptFile.getPath()));
+                    jEditorPane.setText(new String(encoded));
+                    currentFile = scriptFile;
+                } catch (IOException exception) {
+                    // FIXME: Error handling!
+                }
+            }
+        }
+    }//GEN-LAST:event_suiteTreeMouseClicked
+
+    private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
+        if (currentFile != null) {
+            try {
+                Files.write(Paths.get(currentFile.getPath()), jEditorPane.getText().getBytes());
+            } catch (IOException exception) {
+                // FIXME: Error handling!
+            }
+        }
+    }//GEN-LAST:event_saveMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -268,12 +309,12 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu mainMenu;
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JMenuItem newScriptMenuItem;
-    private javax.swing.JMenuItem newSuiteMenuItem;
-    private javax.swing.JMenuItem openScriptMenuItem;
     private javax.swing.JMenuItem openSuiteMenuItem;
+    private javax.swing.JMenuItem runAllMenuItem;
     private javax.swing.JMenuItem runMenuItem;
-    private javax.swing.JMenuItem runSuiteMenuItem;
+    private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JTree suiteTree;
     private javax.swing.JLabel testPilotStatus;
     // End of variables declaration//GEN-END:variables
+
 }
