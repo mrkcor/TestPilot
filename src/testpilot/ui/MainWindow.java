@@ -31,6 +31,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.tree.TreePath;
 import testpilot.core.TestPilot;
+import testpilot.ui.jfilechooser.FileChooserFilter;
 import testpilot.ui.jtree.FileTreeModel;
 import testpilot.ui.jtree.FileTreeNode;
 
@@ -261,6 +262,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
             JFileChooser fileChooser = new JFileChooser(directoryPath);
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fileChooser.setFileFilter(new FileChooserFilter());
 
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 currentFile = fileChooser.getSelectedFile();
