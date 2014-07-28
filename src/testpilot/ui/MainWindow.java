@@ -23,6 +23,7 @@
  */
 package testpilot.ui;
 
+import testpilot.ui.jtree.FileTreeModel;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -40,9 +41,9 @@ public class MainWindow extends javax.swing.JFrame {
      * Creates new form MainWindow
      */
     public MainWindow() {
-        initComponents();
-
         testPilot = new TestPilot(new File(System.getProperty("user.dir")));
+
+        initComponents();
     }
 
     /**
@@ -82,6 +83,8 @@ public class MainWindow extends javax.swing.JFrame {
         testPilotStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         testPilotStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testpilot/resources/grey.png"))); // NOI18N
 
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
+        suiteTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         suiteTree.setRequestFocusEnabled(false);
         suiteTree.setRootVisible(false);
         jScrollPane2.setViewportView(suiteTree);
@@ -215,7 +218,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            System.out.println(selectedFile.getPath());
+            suiteTree.setModel(new FileTreeModel(selectedFile));
         }
     }//GEN-LAST:event_openSuiteMenuItemActionPerformed
 
