@@ -116,9 +116,9 @@ public class TestPilot {
             try {
                 byte[] encoded = Files.readAllBytes(Paths.get(file.getPath()));
                 run(new String(encoded));
-                results.add(new TestResult(file.getName(), true));
+                results.add(new TestResult(file, true));
             } catch (Exception exception) {
-                results.add(new TestResult(file.getName(), false, exception));
+                results.add(new TestResult(file, false, exception));
             }
         }
 

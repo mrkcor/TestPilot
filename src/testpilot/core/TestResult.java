@@ -23,29 +23,35 @@
  */
 package testpilot.core;
 
+import java.io.File;
+
 /**
  *
  * @author Mark Kremer
  */
 public class TestResult {
 
-    private String name;
+    private File file;
     private boolean pass;
     private Exception exception;
 
-    public TestResult(String name, boolean pass, Exception exception) {
-        this.name = name;
+    public TestResult(File file, boolean pass, Exception exception) {
+        this.file = file;
         this.pass = pass;
         this.exception = exception;
     }
 
-    public TestResult(String name, boolean pass) {
-        this.name = name;
+    public TestResult(File file, boolean pass) {
+        this.file = file;
         this.pass = pass;
     }
 
     public String getName() {
-        return name;
+        return file.getName();
+    }
+
+    public File getFile() {
+        return file;
     }
 
     public boolean isPass() {
