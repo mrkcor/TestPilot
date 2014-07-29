@@ -91,6 +91,14 @@ public class ScriptEditor extends JEditorPane {
         return file;
     }
 
+    public String getTitle() {
+        if (file == null) {
+            return "new file";
+        } else {
+            return file.getName();
+        }
+    }
+
     public void setFile(File file) {
         this.file = file;
     }

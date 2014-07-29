@@ -254,10 +254,11 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_newFileMenuItemActionPerformed
 
     private void addEditorTab() {
+        ScriptEditor editor = new ScriptEditor(this);
         ImageIcon editorIcon = new ImageIcon(getClass().getResource("/testpilot/resources/grey.png"));
-        JLabel label = new JLabel("new file");
+        JLabel label = new JLabel(editor.getTitle());
         label.setIcon(editorIcon);
-        editorsPane.addTab(null, new ScriptEditor(this));
+        editorsPane.addTab(null, editor);
         editorsPane.setTabComponentAt(editorsPane.getTabCount() - 1, label);
         editorsPane.setSelectedIndex(editorsPane.getTabCount() - 1);
     }
@@ -265,7 +266,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void addEditorTab(File file) throws IOException {
         ScriptEditor editor = new ScriptEditor(this, file);
         ImageIcon editorIcon = new ImageIcon(getClass().getResource("/testpilot/resources/grey.png"));
-        JLabel label = new JLabel(file.getName());
+        JLabel label = new JLabel(editor.getTitle());
         label.setIcon(editorIcon);
         editorsPane.addTab(null, editor);
         editorsPane.setTabComponentAt(editorsPane.getTabCount() - 1, label);
@@ -276,8 +277,9 @@ public class MainWindow extends javax.swing.JFrame {
         int idx = editorsPane.indexOfComponent(editor);
 
         if (idx != -1) {
-            Component tab = editorsPane.getTabComponentAt(idx);
+            JLabel tab = (JLabel) editorsPane.getTabComponentAt(idx);
             tab.setFont(tab.getFont().deriveFont(changed ? Font.ITALIC : Font.PLAIN));
+            tab.setText(editor.getTitle());
         }
     }
 
