@@ -14,7 +14,7 @@ class TestPilot < Minitest::Runnable
   def setup
     begin
       Capybara.reset_sessions!
-    rescue Errno::ECONNREFUSED
+    rescue Exception
       page.driver.quit
     end
     Capybara.use_default_driver
