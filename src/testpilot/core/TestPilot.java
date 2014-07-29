@@ -26,6 +26,8 @@ package testpilot.core;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import org.jruby.embed.LocalContextScope;
 import org.jruby.embed.ScriptingContainer;
 
@@ -35,26 +37,40 @@ import org.jruby.embed.ScriptingContainer;
  */
 public class TestPilot {
 
+    private static TestPilot instance;
     private File basePath;
     private File scriptsPath;
     private File functionsPath;
+    private TestResultList lastTestResults;
 
-    public TestPilot(File basePath) {
-        if (!basePath.isDirectory()) {
-            throw new IllegalArgumentException("TestPilot basepath must be a directory.");
+    private TestPilot() {
+
+    }
+
+    public static TestPilot getInstance() {
+        if (instance == null) {
+            instance = new TestPilot();
         }
 
-        if (!basePath.canRead()) {
-            throw new IllegalArgumentException("TestPilot basepath is not readable.");
-        }
-
-        this.basePath = basePath;
-        this.scriptsPath = new File(basePath.getPath() + File.separator + "scripts");
-        this.functionsPath = new File(scriptsPath.getPath() + File.separator + "functions");
+        return instance;
     }
 
     public File getBasePath() {
         return basePath;
+    }
+
+    public void setBasePath(File basePath) {
+        guardIsValidDirectory(basePath);
+
+        this.basePath = basePath;
+
+        if (this.scriptsPath == null) {
+            setScriptsPath(new File(basePath.getPath() + File.separator + "scripts"));
+        }
+
+        if (this.functionsPath == null) {
+            setFunctionsPath(new File(scriptsPath.getPath() + File.separator + "functions"));
+        }
     }
 
     public File getScriptsPath() {
@@ -62,6 +78,7 @@ public class TestPilot {
     }
 
     public void setScriptsPath(File scriptsPath) {
+        guardIsValidDirectory(scriptsPath);
         this.scriptsPath = scriptsPath;
     }
 
@@ -70,7 +87,12 @@ public class TestPilot {
     }
 
     public void setFunctionsPath(File functionsPath) {
+        guardIsValidDirectory(functionsPath);
         this.functionsPath = functionsPath;
+    }
+
+    public TestResultList getLastTestResults() {
+        return lastTestResults;
     }
 
     public void run(String script) throws Exception {
@@ -84,25 +106,32 @@ public class TestPilot {
     }
 
     public void runDirectory(File path) {
-        if (!path.isDirectory()) {
-            throw new IllegalArgumentException("Path must be a directory.");
-        }
-
-        if (!path.canRead()) {
-            throw new IllegalArgumentException("Path is not readable.");
-        }
+        guardIsValidDirectory(path);
 
         File[] files = path.listFiles();
 
+        ArrayList<TestResult> results = new ArrayList<>();
+
         for (File file : files) {
             try {
-                System.out.println("Running " + file.getName());
                 byte[] encoded = Files.readAllBytes(Paths.get(file.getPath()));
                 run(new String(encoded));
+                results.add(new TestResult(file.getName(), true));
             } catch (Exception exception) {
-                // TODO: Handle failure
+                results.add(new TestResult(file.getName(), false, exception));
             }
         }
+
+        lastTestResults = new TestResultList(path, results);
     }
 
+    private void guardIsValidDirectory(File path) {
+        if (!path.isDirectory()) {
+            throw new IllegalArgumentException("Not a directory.");
+        }
+
+        if (!path.canRead()) {
+            throw new IllegalArgumentException("Not readable.");
+        }
+    }
 }

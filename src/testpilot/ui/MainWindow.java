@@ -32,6 +32,7 @@ import javax.swing.JFileChooser;
 import javax.swing.tree.TreePath;
 import testpilot.core.TestPilot;
 import testpilot.ui.jfilechooser.FileChooserFilter;
+import testpilot.ui.jtree.FileTreeCellRenderer;
 import testpilot.ui.jtree.FileTreeModel;
 import testpilot.ui.jtree.FileTreeNode;
 
@@ -42,14 +43,15 @@ import testpilot.ui.jtree.FileTreeNode;
 public class MainWindow extends javax.swing.JFrame {
 
     private final TestPilot testPilot;
-    private File currentSuite;
+    private File currentDirectory;
     private File currentFile;
 
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
-        testPilot = new TestPilot(new File(System.getProperty("user.dir")));
+        testPilot = TestPilot.getInstance();
+        testPilot.setBasePath(new File(System.getProperty("user.dir")));
 
         initComponents();
     }
@@ -67,14 +69,14 @@ public class MainWindow extends javax.swing.JFrame {
         jEditorPane = new javax.swing.JEditorPane();
         testPilotStatus = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        currentSuiteTree = new javax.swing.JTree();
-        currentSuiteLabel = new javax.swing.JLabel();
+        currentDirectoryTree = new javax.swing.JTree();
+        currentDirectoryLabel = new javax.swing.JLabel();
         currentFileLabel = new javax.swing.JLabel();
         mainMenuBar = new javax.swing.JMenuBar();
         mainMenu = new javax.swing.JMenu();
-        openSuiteMenuItem = new javax.swing.JMenuItem();
+        openDirectoryMenuItem = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        newScriptMenuItem = new javax.swing.JMenuItem();
+        newFileMenuItem = new javax.swing.JMenuItem();
         saveMenuItem = new javax.swing.JMenuItem();
         runMenuItem = new javax.swing.JMenuItem();
         runAllMenuItem = new javax.swing.JMenuItem();
@@ -92,40 +94,41 @@ public class MainWindow extends javax.swing.JFrame {
         testPilotStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/testpilot/resources/grey.png"))); // NOI18N
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
-        currentSuiteTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        currentSuiteTree.setRequestFocusEnabled(false);
-        currentSuiteTree.setRootVisible(false);
-        currentSuiteTree.addMouseListener(new java.awt.event.MouseAdapter() {
+        currentDirectoryTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        currentDirectoryTree.setCellRenderer(new FileTreeCellRenderer());
+        currentDirectoryTree.setRequestFocusEnabled(false);
+        currentDirectoryTree.setRootVisible(false);
+        currentDirectoryTree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                currentSuiteTreeMouseClicked(evt);
+                currentDirectoryTreeMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(currentSuiteTree);
+        jScrollPane2.setViewportView(currentDirectoryTree);
 
-        currentSuiteLabel.setText("Suite");
+        currentDirectoryLabel.setText("Directory");
 
         currentFileLabel.setText("New file");
 
         mainMenu.setText("File");
 
-        openSuiteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        openSuiteMenuItem.setText("Open directory");
-        openSuiteMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        openDirectoryMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        openDirectoryMenuItem.setText("Open directory");
+        openDirectoryMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openSuiteMenuItemActionPerformed(evt);
+                openDirectoryMenuItemActionPerformed(evt);
             }
         });
-        mainMenu.add(openSuiteMenuItem);
+        mainMenu.add(openDirectoryMenuItem);
         mainMenu.add(jSeparator1);
 
-        newScriptMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        newScriptMenuItem.setText("New");
-        newScriptMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        newFileMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        newFileMenuItem.setText("New");
+        newFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newScriptMenuItemActionPerformed(evt);
+                newFileMenuItemActionPerformed(evt);
             }
         });
-        mainMenu.add(newScriptMenuItem);
+        mainMenu.add(newFileMenuItem);
 
         saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         saveMenuItem.setText("Save");
@@ -179,7 +182,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(currentSuiteLabel))
+                            .addComponent(currentDirectoryLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -195,7 +198,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(testPilotStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(currentSuiteLabel)
+                    .addComponent(currentDirectoryLabel)
                     .addComponent(currentFileLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,31 +227,31 @@ public class MainWindow extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
-    private void openSuiteMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openSuiteMenuItemActionPerformed
+    private void openDirectoryMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDirectoryMenuItemActionPerformed
         JFileChooser fileChooser = new JFileChooser(testPilot.getScriptsPath());
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            currentSuite = fileChooser.getSelectedFile();
-            currentSuiteTree.setModel(new FileTreeModel(currentSuite));
+            currentDirectory = fileChooser.getSelectedFile();
+            currentDirectoryTree.setModel(new FileTreeModel(currentDirectory));
         }
-    }//GEN-LAST:event_openSuiteMenuItemActionPerformed
+    }//GEN-LAST:event_openDirectoryMenuItemActionPerformed
 
-    private void newScriptMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newScriptMenuItemActionPerformed
+    private void newFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileMenuItemActionPerformed
         currentFile = null;
         currentFileLabel.setText("New file");
         jEditorPane.setText("");
-    }//GEN-LAST:event_newScriptMenuItemActionPerformed
+    }//GEN-LAST:event_newFileMenuItemActionPerformed
 
     private void runAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runAllMenuItemActionPerformed
-        if (currentSuite != null) {
-            testPilot.runDirectory(currentSuite);
+        if (currentDirectory != null) {
+            testPilot.runDirectory(currentDirectory);
         }
     }//GEN-LAST:event_runAllMenuItemActionPerformed
 
-    private void currentSuiteTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_currentSuiteTreeMouseClicked
+    private void currentDirectoryTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_currentDirectoryTreeMouseClicked
         if (evt.getClickCount() == 2) {
-            TreePath path = currentSuiteTree.getSelectionPath();
+            TreePath path = currentDirectoryTree.getSelectionPath();
             if (path != null) {
                 try {
                     File scriptFile = ((FileTreeNode) path.getLastPathComponent()).getUserObject();
@@ -261,11 +264,11 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             }
         }
-    }//GEN-LAST:event_currentSuiteTreeMouseClicked
+    }//GEN-LAST:event_currentDirectoryTreeMouseClicked
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
         if (currentFile == null) {
-            File directoryPath = currentSuite;
+            File directoryPath = currentDirectory;
             if (directoryPath == null) {
                 directoryPath = testPilot.getScriptsPath();
             }
@@ -287,8 +290,8 @@ public class MainWindow extends javax.swing.JFrame {
             currentFileLabel.setText(currentFile.getName());
         }
 
-        if (currentSuite != null) {
-            currentSuiteTree.setModel(new FileTreeModel(currentSuite));
+        if (currentDirectory != null) {
+            currentDirectoryTree.setModel(new FileTreeModel(currentDirectory));
         }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
@@ -328,9 +331,9 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel currentDirectoryLabel;
+    private javax.swing.JTree currentDirectoryTree;
     private javax.swing.JLabel currentFileLabel;
-    private javax.swing.JLabel currentSuiteLabel;
-    private javax.swing.JTree currentSuiteTree;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JEditorPane jEditorPane;
     private javax.swing.JScrollPane jScrollPane1;
@@ -339,8 +342,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JMenu mainMenu;
     private javax.swing.JMenuBar mainMenuBar;
-    private javax.swing.JMenuItem newScriptMenuItem;
-    private javax.swing.JMenuItem openSuiteMenuItem;
+    private javax.swing.JMenuItem newFileMenuItem;
+    private javax.swing.JMenuItem openDirectoryMenuItem;
     private javax.swing.JMenuItem runAllMenuItem;
     private javax.swing.JMenuItem runMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
