@@ -151,7 +151,7 @@ public class MainWindow extends javax.swing.JFrame {
         mainMenu.add(runMenuItem);
 
         runAllMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        runAllMenuItem.setText("Run all");
+        runAllMenuItem.setText("Run directory");
         runAllMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 runAllMenuItemActionPerformed(evt);
