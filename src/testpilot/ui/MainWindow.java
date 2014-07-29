@@ -24,11 +24,13 @@
 package testpilot.ui;
 
 import java.awt.Component;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.tree.TreePath;
 import testpilot.core.TestPilot;
 import testpilot.core.TestResult;
@@ -214,7 +216,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void setActiveScriptEditorTabIcon(String name) {
         ImageIcon tabIcon = new ImageIcon(getClass().getResource("/testpilot/resources/" + name + ".png"));
-        editorTabbedPane.setIconAt(editorTabbedPane.getSelectedIndex(), tabIcon);
+        ((JLabel) editorTabbedPane.getTabComponentAt(editorTabbedPane.getSelectedIndex())).setIcon(tabIcon);
     }
 
     private void runMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runMenuItemActionPerformed
@@ -253,22 +255,38 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void addEditorTab() {
         ImageIcon editorIcon = new ImageIcon(getClass().getResource("/testpilot/resources/grey.png"));
-        editorTabbedPane.addTab("New file", editorIcon, new ScriptEditor(this));
+        JLabel label = new JLabel("new file");
+        label.setIcon(editorIcon);
+        editorTabbedPane.addTab(null, new ScriptEditor(this));
+        editorTabbedPane.setTabComponentAt(editorTabbedPane.getTabCount() - 1, label);
         editorTabbedPane.setSelectedIndex(editorTabbedPane.getTabCount() - 1);
     }
 
     private void addEditorTab(File file) throws IOException {
         ScriptEditor editor = new ScriptEditor(this, file);
         ImageIcon editorIcon = new ImageIcon(getClass().getResource("/testpilot/resources/grey.png"));
-        editorTabbedPane.addTab(file.getName(), editorIcon, editor);
+        JLabel label = new JLabel(file.getName());
+        label.setIcon(editorIcon);
+        editorTabbedPane.addTab(null, editor);
+        editorTabbedPane.setTabComponentAt(editorTabbedPane.getTabCount() - 1, label);
         editorTabbedPane.setSelectedIndex(editorTabbedPane.getTabCount() - 1);
+    }
+
+    protected void setEditorTabChanged(ScriptEditor editor, boolean changed) {
+        int idx = editorTabbedPane.indexOfComponent(editor);
+
+        if (idx != -1) {
+            Component tab = editorTabbedPane.getTabComponentAt(idx);
+            tab.setFont(tab.getFont().deriveFont(changed ? Font.ITALIC : Font.PLAIN));
+        }
     }
 
     private void setEditorTabIcon(File file, String name) {
         for (int idx = 0; idx < editorTabbedPane.getTabCount(); idx++) {
             ScriptEditor editor = (ScriptEditor) editorTabbedPane.getComponentAt(idx);
             if (editor.isForFile(file)) {
-                editorTabbedPane.setIconAt(idx, new ImageIcon(getClass().getResource("/testpilot/resources/" + name + ".png")));
+                JLabel tab = (JLabel) editorTabbedPane.getTabComponentAt(idx);
+                tab.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/" + name + ".png")));
                 break;
             }
         }
