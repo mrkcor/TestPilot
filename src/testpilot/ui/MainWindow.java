@@ -84,7 +84,7 @@ public class MainWindow extends javax.swing.JFrame {
         newFileMenuItem = new javax.swing.JMenuItem();
         saveMenuItem = new javax.swing.JMenuItem();
         runMenuItem = new javax.swing.JMenuItem();
-        runAllMenuItem = new javax.swing.JMenuItem();
+        runDirectoryMenuItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         exitMenuItem = new javax.swing.JMenuItem();
 
@@ -150,14 +150,14 @@ public class MainWindow extends javax.swing.JFrame {
         });
         mainMenu.add(runMenuItem);
 
-        runAllMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        runAllMenuItem.setText("Run directory");
-        runAllMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        runDirectoryMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        runDirectoryMenuItem.setText("Run directory");
+        runDirectoryMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runAllMenuItemActionPerformed(evt);
+                runDirectoryMenuItemActionPerformed(evt);
             }
         });
-        mainMenu.add(runAllMenuItem);
+        mainMenu.add(runDirectoryMenuItem);
         mainMenu.add(jSeparator2);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
@@ -296,7 +296,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     }
 
-    private void runAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runAllMenuItemActionPerformed
+    private void runDirectoryMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runDirectoryMenuItemActionPerformed
         if (currentDirectory != null) {
             testPilot.runDirectory(currentDirectory);
             List<TestResult> results = testPilot.getLastTestResults().getResults();
@@ -328,7 +328,7 @@ public class MainWindow extends javax.swing.JFrame {
                 testPilotStatus.setText(passed + " passed, " + failed + " failed");
             }
         }
-    }//GEN-LAST:event_runAllMenuItemActionPerformed
+    }//GEN-LAST:event_runDirectoryMenuItemActionPerformed
 
     private void currentDirectoryTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_currentDirectoryTreeMouseClicked
         if (evt.getClickCount() == 2) {
@@ -407,7 +407,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JMenuItem newFileMenuItem;
     private javax.swing.JMenuItem openDirectoryMenuItem;
-    private javax.swing.JMenuItem runAllMenuItem;
+    private javax.swing.JMenuItem runDirectoryMenuItem;
     private javax.swing.JMenuItem runMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JLabel testPilotStatus;
