@@ -73,7 +73,7 @@ public class MainWindow extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         currentDirectoryTree = new javax.swing.JTree();
         currentDirectoryLabel = new javax.swing.JLabel();
-        editorTabbedPane = new javax.swing.JTabbedPane();
+        editorsPane = new javax.swing.JTabbedPane();
         mainMenuBar = new javax.swing.JMenuBar();
         mainMenu = new javax.swing.JMenu();
         openDirectoryMenuItem = new javax.swing.JMenuItem();
@@ -107,7 +107,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         currentDirectoryLabel.setText("Directory");
 
-        editorTabbedPane.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        editorsPane.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
 
         mainMenu.setText("File");
 
@@ -191,7 +191,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(currentDirectoryLabel)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editorTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
+                .addComponent(editorsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -205,7 +205,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(currentDirectoryLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))
-                    .addComponent(editorTabbedPane))
+                    .addComponent(editorsPane))
                 .addContainerGap())
         );
 
@@ -214,26 +214,26 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void setActiveScriptEditorTabIcon(String name) {
+    private void setActiveEditorTabIcon(String name) {
         ImageIcon tabIcon = new ImageIcon(getClass().getResource("/testpilot/resources/" + name + ".png"));
-        ((JLabel) editorTabbedPane.getTabComponentAt(editorTabbedPane.getSelectedIndex())).setIcon(tabIcon);
+        ((JLabel) editorsPane.getTabComponentAt(editorsPane.getSelectedIndex())).setIcon(tabIcon);
     }
 
     private void runMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runMenuItemActionPerformed
         try {
-            testPilot.run(getActiveScriptEditor().getText());
-            setActiveScriptEditorTabIcon("green");
+            testPilot.run(getActiveEditor().getText());
+            setActiveEditorTabIcon("green");
             testPilotStatus.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/green.png")));
             testPilotStatus.setText("OK");
         } catch (Exception exception) {
-            setActiveScriptEditorTabIcon("red");
+            setActiveEditorTabIcon("red");
             testPilotStatus.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/red.png")));
             testPilotStatus.setText("Failed");
         }
     }//GEN-LAST:event_runMenuItemActionPerformed
 
-    private ScriptEditor getActiveScriptEditor() {
-        return ((ScriptEditor) editorTabbedPane.getSelectedComponent());
+    private ScriptEditor getActiveEditor() {
+        return ((ScriptEditor) editorsPane.getSelectedComponent());
     }
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
@@ -257,9 +257,9 @@ public class MainWindow extends javax.swing.JFrame {
         ImageIcon editorIcon = new ImageIcon(getClass().getResource("/testpilot/resources/grey.png"));
         JLabel label = new JLabel("new file");
         label.setIcon(editorIcon);
-        editorTabbedPane.addTab(null, new ScriptEditor(this));
-        editorTabbedPane.setTabComponentAt(editorTabbedPane.getTabCount() - 1, label);
-        editorTabbedPane.setSelectedIndex(editorTabbedPane.getTabCount() - 1);
+        editorsPane.addTab(null, new ScriptEditor(this));
+        editorsPane.setTabComponentAt(editorsPane.getTabCount() - 1, label);
+        editorsPane.setSelectedIndex(editorsPane.getTabCount() - 1);
     }
 
     private void addEditorTab(File file) throws IOException {
@@ -267,25 +267,25 @@ public class MainWindow extends javax.swing.JFrame {
         ImageIcon editorIcon = new ImageIcon(getClass().getResource("/testpilot/resources/grey.png"));
         JLabel label = new JLabel(file.getName());
         label.setIcon(editorIcon);
-        editorTabbedPane.addTab(null, editor);
-        editorTabbedPane.setTabComponentAt(editorTabbedPane.getTabCount() - 1, label);
-        editorTabbedPane.setSelectedIndex(editorTabbedPane.getTabCount() - 1);
+        editorsPane.addTab(null, editor);
+        editorsPane.setTabComponentAt(editorsPane.getTabCount() - 1, label);
+        editorsPane.setSelectedIndex(editorsPane.getTabCount() - 1);
     }
 
     protected void setEditorTabChanged(ScriptEditor editor, boolean changed) {
-        int idx = editorTabbedPane.indexOfComponent(editor);
+        int idx = editorsPane.indexOfComponent(editor);
 
         if (idx != -1) {
-            Component tab = editorTabbedPane.getTabComponentAt(idx);
+            Component tab = editorsPane.getTabComponentAt(idx);
             tab.setFont(tab.getFont().deriveFont(changed ? Font.ITALIC : Font.PLAIN));
         }
     }
 
     private void setEditorTabIcon(File file, String name) {
-        for (int idx = 0; idx < editorTabbedPane.getTabCount(); idx++) {
-            ScriptEditor editor = (ScriptEditor) editorTabbedPane.getComponentAt(idx);
+        for (int idx = 0; idx < editorsPane.getTabCount(); idx++) {
+            ScriptEditor editor = (ScriptEditor) editorsPane.getComponentAt(idx);
             if (editor.isForFile(file)) {
-                JLabel tab = (JLabel) editorTabbedPane.getTabComponentAt(idx);
+                JLabel tab = (JLabel) editorsPane.getTabComponentAt(idx);
                 tab.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/" + name + ".png")));
                 break;
             }
@@ -294,11 +294,11 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void openEditorTab(File file) throws IOException {
         boolean found = false;
-        for (int idx = 0; idx < editorTabbedPane.getTabCount(); idx++) {
-            ScriptEditor editor = (ScriptEditor) editorTabbedPane.getComponentAt(idx);
+        for (int idx = 0; idx < editorsPane.getTabCount(); idx++) {
+            ScriptEditor editor = (ScriptEditor) editorsPane.getComponentAt(idx);
 
             if (editor.isForFile(file)) {
-                editorTabbedPane.setSelectedIndex(idx);
+                editorsPane.setSelectedIndex(idx);
                 found = true;
                 break;
             }
@@ -311,8 +311,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void openDirectory(File directory) {
         currentDirectory = directory;
-        currentDirectoryTree.setModel(new FileTreeModel(currentDirectory));
-
+        refreshCurrentDirectoryTree();
     }
 
     private void runDirectoryMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runDirectoryMenuItemActionPerformed
@@ -346,6 +345,8 @@ public class MainWindow extends javax.swing.JFrame {
                 testPilotStatus.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/yellow.png")));
                 testPilotStatus.setText(passed + " passed, " + failed + " failed");
             }
+
+            refreshCurrentDirectoryTree();
         }
     }//GEN-LAST:event_runDirectoryMenuItemActionPerformed
 
@@ -369,22 +370,26 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
         try {
-            getActiveScriptEditor().save();
+            getActiveEditor().save();
         } catch (IOException exception) {
             // FIXME: Error handling
         }
 
+        refreshCurrentDirectoryTree();
+    }//GEN-LAST:event_saveMenuItemActionPerformed
+
+    private void refreshCurrentDirectoryTree() {
         if (currentDirectory != null) {
             currentDirectoryTree.setModel(new FileTreeModel(currentDirectory));
         }
-    }//GEN-LAST:event_saveMenuItemActionPerformed
+    }
 
     private void closeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeMenuItemActionPerformed
-        if (editorTabbedPane.getTabCount() > 0) {
-            editorTabbedPane.remove(editorTabbedPane.getSelectedIndex());
+        if (editorsPane.getTabCount() > 0) {
+            editorsPane.remove(editorsPane.getSelectedIndex());
         }
 
-        if (editorTabbedPane.getTabCount() == 0) {
+        if (editorsPane.getTabCount() == 0) {
             addEditorTab();
         }
     }//GEN-LAST:event_closeMenuItemActionPerformed
@@ -428,7 +433,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem closeMenuItem;
     private javax.swing.JLabel currentDirectoryLabel;
     private javax.swing.JTree currentDirectoryTree;
-    private javax.swing.JTabbedPane editorTabbedPane;
+    private javax.swing.JTabbedPane editorsPane;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
