@@ -55,12 +55,7 @@ public class MainWindow extends javax.swing.JFrame {
         initComponents();
 
         openDirectory(testPilot.getScriptsPath());
-
-        try {
-            addEditorTab();
-        } catch (IOException exception) {
-
-        }
+        addEditorTab();
     }
 
     /**
@@ -83,6 +78,7 @@ public class MainWindow extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         newFileMenuItem = new javax.swing.JMenuItem();
         saveMenuItem = new javax.swing.JMenuItem();
+        closeMenuItem = new javax.swing.JMenuItem();
         runMenuItem = new javax.swing.JMenuItem();
         runDirectoryMenuItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
@@ -140,6 +136,15 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         mainMenu.add(saveMenuItem);
+
+        closeMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
+        closeMenuItem.setText("Close");
+        closeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeMenuItemActionPerformed(evt);
+            }
+        });
+        mainMenu.add(closeMenuItem);
 
         runMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
         runMenuItem.setText("Run");
@@ -243,14 +248,10 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_openDirectoryMenuItemActionPerformed
 
     private void newFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileMenuItemActionPerformed
-        try {
-            addEditorTab();
-        } catch (IOException exception) {
-
-        }
+        addEditorTab();
     }//GEN-LAST:event_newFileMenuItemActionPerformed
 
-    private void addEditorTab() throws IOException {
+    private void addEditorTab() {
         ImageIcon editorIcon = new ImageIcon(getClass().getResource("/testpilot/resources/grey.png"));
         editorTabbedPane.addTab("New file", editorIcon, new ScriptEditor(this));
         editorTabbedPane.setSelectedIndex(editorTabbedPane.getTabCount() - 1);
@@ -360,6 +361,16 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
+    private void closeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeMenuItemActionPerformed
+        if (editorTabbedPane.getTabCount() > 0) {
+            editorTabbedPane.remove(editorTabbedPane.getSelectedIndex());
+        }
+
+        if (editorTabbedPane.getTabCount() == 0) {
+            addEditorTab();
+        }
+    }//GEN-LAST:event_closeMenuItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -396,6 +407,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem closeMenuItem;
     private javax.swing.JLabel currentDirectoryLabel;
     private javax.swing.JTree currentDirectoryTree;
     private javax.swing.JTabbedPane editorTabbedPane;
