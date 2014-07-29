@@ -27,10 +27,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.tree.TreePath;
 import testpilot.core.TestPilot;
+import testpilot.core.TestResult;
 import testpilot.ui.jfilechooser.FileChooserFilter;
 import testpilot.ui.jtree.FileTreeCellRenderer;
 import testpilot.ui.jtree.FileTreeModel;
@@ -246,6 +248,32 @@ public class MainWindow extends javax.swing.JFrame {
     private void runAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runAllMenuItemActionPerformed
         if (currentDirectory != null) {
             testPilot.runDirectory(currentDirectory);
+            List<TestResult> results = testPilot.getLastTestResults().getResults();
+
+            testPilotStatus.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/grey.png")));
+            testPilotStatus.setText("");
+
+            int passed = 0;
+            int failed = 0;
+
+            for (TestResult result : results) {
+                if (result.isPass()) {
+                    passed += 1;
+                } else {
+                    failed += 1;
+                }
+            }
+
+            if (failed == 0) {
+                testPilotStatus.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/green.png")));
+                testPilotStatus.setText("All passed");
+            } else if (passed == 0) {
+                testPilotStatus.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/red.png")));
+                testPilotStatus.setText("All failed");
+            } else {
+                testPilotStatus.setIcon(new ImageIcon(getClass().getResource("/testpilot/resources/yellow.png")));
+                testPilotStatus.setText(passed + " passed, " + failed + " failed");
+            }
         }
     }//GEN-LAST:event_runAllMenuItemActionPerformed
 
