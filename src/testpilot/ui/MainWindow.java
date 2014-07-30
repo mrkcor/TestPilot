@@ -55,7 +55,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         initComponents();
 
-        openDirectory(testPilot.getScriptsPath());
+        openDirectory(new File(testPilot.getScriptsPath().getPath() + File.separator + "suites"));
         addEditorTab();
     }
 
