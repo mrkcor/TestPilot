@@ -27,7 +27,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 import org.jruby.embed.LocalContextScope;
 import org.jruby.embed.ScriptingContainer;
 
@@ -40,7 +39,6 @@ public class TestPilot {
     private static TestPilot instance;
     private File basePath;
     private File scriptsPath;
-    private File functionsPath;
     private TestResultList lastTestResults;
 
     private TestPilot() {
@@ -67,10 +65,6 @@ public class TestPilot {
         if (this.scriptsPath == null) {
             setScriptsPath(new File(basePath.getPath() + File.separator + "scripts"));
         }
-
-        if (this.functionsPath == null) {
-            setFunctionsPath(new File(scriptsPath.getPath() + File.separator + "functions"));
-        }
     }
 
     public File getScriptsPath() {
@@ -82,15 +76,6 @@ public class TestPilot {
         this.scriptsPath = scriptsPath;
     }
 
-    public File getFunctionsPath() {
-        return functionsPath;
-    }
-
-    public void setFunctionsPath(File functionsPath) {
-        guardIsValidDirectory(functionsPath);
-        this.functionsPath = functionsPath;
-    }
-
     public TestResultList getLastTestResults() {
         return lastTestResults;
     }
@@ -100,7 +85,7 @@ public class TestPilot {
         container.runScriptlet("ENV['GEM_PATH']='" + getBasePath().getPath() + "/lib/rubygems/'");
         container.runScriptlet("require './lib/ruby/test_pilot.rb'");
         container.runScriptlet("$LOAD_PATH << '" + getScriptsPath().getPath() + "'");
-        container.runScriptlet("TestPilot.functions_path='" + getFunctionsPath().getPath() + "'");
+        container.runScriptlet("TestPilot.scripts_path='" + getScriptsPath().getPath() + "'");
         // TODO: Connect container STDOUT and STDERR to GUI
         container.runScriptlet("TestPilot.new('TestPilot').fly do; " + script + "; end");
     }
