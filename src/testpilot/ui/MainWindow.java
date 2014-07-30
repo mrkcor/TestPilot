@@ -240,7 +240,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void openDirectoryMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDirectoryMenuItemActionPerformed
-        JFileChooser fileChooser = new JFileChooser(testPilot.getScriptsPath());
+        JFileChooser fileChooser = new JFileChooser(currentDirectory);
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
