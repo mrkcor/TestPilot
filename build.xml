@@ -79,7 +79,6 @@
         </copy>
         <mkdir dir="${dist.dir}/scripts" />
         <mkdir dir="${dist.dir}/scripts/functions" />
-        <mkdir dir="${dist.dir}/scripts/lib" />
         <mkdir dir="${dist.dir}/scripts/suites" />
     </target>
 </project>
