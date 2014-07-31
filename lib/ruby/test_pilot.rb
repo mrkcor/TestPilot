@@ -38,6 +38,14 @@ class TestPilot < Minitest::Runnable
     function_file_path = "#{@@scripts_path}/functions/#{method_name}"
     if (File.exists?(function_file_path))
        define_singleton_method(method_name) do |*args|
+         if args.count == 1 && args.first.is_a?(Hash)
+           arguments = args.first
+         elseif args.count == 0
+           arguments = Hash.new
+         else
+           arguments = args
+         end
+
          eval(File.read(function_file_path))
        end
 
