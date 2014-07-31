@@ -15,9 +15,9 @@ should just work.
 
 # Getting started
 
-Download the binary distribution and unzip it at a location of your own
-preference. To start the application navigate there with your file explorer
-and double click on TestPilot.jar.
+Download the binary distribution here: https://github.com/mkremer/TestPilot/releases/latest.
+Unzip it at a location of your own preference. To start the application navigate
+there with your file explorer and double click on TestPilot.jar.
 
 ## Customizing your setup
 
