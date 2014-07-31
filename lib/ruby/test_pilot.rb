@@ -19,14 +19,18 @@ class TestPilot < Minitest::Runnable
       page.driver.quit
     end
     Capybara.use_default_driver
+
+    unless @options["app_host"].nil?
+      Capybara.app_host = @options["app_host"]
+    end
   end
 
   def fly(&block)
-    setup
     @options = Hash.new
     if File.exists?("#{@@scripts_path}/test_pilot.rb")
-      require "#{@@scripts_path}/test_pilot.rb"
+      eval(File.read("#{@@scripts_path}/test_pilot.rb"))
     end
+    setup
     instance_exec(&block)
   end
 
