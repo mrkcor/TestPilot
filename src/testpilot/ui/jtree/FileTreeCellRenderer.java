@@ -24,7 +24,6 @@
 package testpilot.ui.jtree;
 
 import java.awt.Component;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -43,7 +42,6 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
         Component component = super.getTreeCellRendererComponent(tree, value, selected, expanded, isLeaf, row, focused);
 
         if (isLeaf) {
-            // check the status
             TestResultList testResultList = TestPilot.getInstance().getLastTestResults();
             ImageIcon icon = new ImageIcon(getClass().getResource("/testpilot/resources/grey.png"));
 
