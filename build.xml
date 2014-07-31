@@ -77,6 +77,12 @@
         <copy todir="${dist.dir}/lib/ruby/">
             <fileset dir="./lib/ruby/" />
         </copy>
+        <copy todir="${dist.dir}">
+            <fileset file="COPYING" />
+            <fileset file="LICENSE.JRUBY" />
+            <fileset file="LICENSE.RUBY" />
+            <fileset file="README.md" />
+        </copy>
         <mkdir dir="${dist.dir}/scripts" />
         <mkdir dir="${dist.dir}/scripts/functions" />
         <mkdir dir="${dist.dir}/scripts/suites" />
