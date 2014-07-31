@@ -24,7 +24,7 @@ and double click on TestPilot.jar.
 You can customize the setup for all your scripts by selecting the customizations
 option from the File menu, this opens up scripts/test_pilot.rb which is always
 evaluated before your scripts run. You can change the Capybara app host here by
-setting @options["app_host"] to a value of your choosing and apply custom code
+setting \@options["app_host"] to a value of your choosing and apply custom code
 of your own design.
 
 ## Writing and running scripts
