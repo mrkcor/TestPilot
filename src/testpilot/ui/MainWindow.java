@@ -76,6 +76,7 @@ public class MainWindow extends javax.swing.JFrame {
         mainMenuBar = new javax.swing.JMenuBar();
         mainMenu = new javax.swing.JMenu();
         openDirectoryMenuItem = new javax.swing.JMenuItem();
+        customizationsMenuItem = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         newFileMenuItem = new javax.swing.JMenuItem();
         saveMenuItem = new javax.swing.JMenuItem();
@@ -118,6 +119,14 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         mainMenu.add(openDirectoryMenuItem);
+
+        customizationsMenuItem.setText("Customizations");
+        customizationsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customizationsMenuItemActionPerformed(evt);
+            }
+        });
+        mainMenu.add(customizationsMenuItem);
         mainMenu.add(jSeparator1);
 
         newFileMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
@@ -395,6 +404,20 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_closeMenuItemActionPerformed
 
+    private void customizationsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customizationsMenuItemActionPerformed
+        File customizationsFile = new File(testPilot.getScriptsPath() + File.separator + "test_pilot.rb");
+
+        try {
+            if (!customizationsFile.exists()) {
+                customizationsFile.createNewFile();
+            }
+
+            openEditorTab(customizationsFile);
+        } catch (IOException exception) {
+            // FIXME: Error handling
+        }
+    }//GEN-LAST:event_customizationsMenuItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -434,6 +457,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem closeMenuItem;
     private javax.swing.JLabel currentDirectoryLabel;
     private javax.swing.JTree currentDirectoryTree;
+    private javax.swing.JMenuItem customizationsMenuItem;
     private javax.swing.JTabbedPane editorsPane;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JScrollPane jScrollPane2;
