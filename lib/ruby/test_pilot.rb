@@ -40,7 +40,7 @@ class TestPilot < Minitest::Runnable
        define_singleton_method(method_name) do |*args|
          if args.count == 1 && args.first.is_a?(Hash)
            arguments = args.first
-         elseif args.count == 0
+         elsif args.count == 0
            arguments = Hash.new
          else
            arguments = args
